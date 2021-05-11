@@ -1,10 +1,14 @@
 Rails.application.routes.draw do
 
-  get 'favorites/create'
-  get 'favorites/destroy'
   devise_for :users
 
-  resources :users,only: [:show,:index,:edit,:update]
+  resources :users,only: [:show,:index,:edit,:update] do
+    get 'following_users' => 'relationships#following_users', as: 'following_users'
+    get 'follower_users' => 'relationships#follower_users', as: 'follower_users'
+    post 'follow' => 'relationships#follow', as: 'follow'
+    post 'unfollow' => 'relationships#unfollow', as: 'unfollow'
+  end
+
 
   resources :books do
     resource :favorites, only: [:create, :destroy]
